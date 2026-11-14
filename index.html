@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>দ্বিতীয়তম জাতীয় মুরগি নির্বাচন - মুকিত</title>
+    <!-- Google Fonts for Bengali -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-paper: #f4efe6;
+            --ink-black: #121212;
+            --accent-red: #d90429;
+            --accent-gold: #ffb703;
+            --accent-green: #2b9348;
+            --card-shadow: 10px 10px 0px #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-paper);
+            background-image: 
+                radial-gradient(#121212 0.75px, transparent 0.75px), 
+                radial-gradient(#121212 0.75px, var(--bg-paper) 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-attachment: fixed;
+            color: var(--ink-black);
+            font-family: 'Hind Siliguri', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background overlay to soften dots */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(244, 239, 230, 0.92);
+            z-index: -1;
+        }
+
+        /* Top Breaking News Marquee */
+        .marquee-wrapper {
+            background: var(--ink-black);
+            color: var(--bg-paper);
+            padding: 10px 0;
+            border-bottom: 4px solid var(--accent-red);
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 22s linear infinite;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .marquee-content span {
+            margin: 0 30px;
+            color: var(--accent-gold);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Main Smartboard Container */
+        .main-container {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 25px 40px;
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 45px;
+            align-items: center;
+            z-index: 5;
+        }
+
+        /* Left Column: Poster Showcase */
+        .poster-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .badge-floating {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--accent-red);
+            color: #fff;
+            padding: 10px 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: 3px solid var(--ink-black);
+            box-shadow: 5px 5px 0px var(--ink-black);
+            transform: rotate(-6deg);
+            z-index: 10;
+            animation: pulseBadge 2s infinite ease-in-out;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { transform: rotate(-6deg) scale(1); }
+            50% { transform: rotate(-3deg) scale(1.08); }
+        }
+
+        .poster-frame {
+            background: #fff;
+            padding: 14px;
+            border: 5px solid var(--ink-black);
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            max-height: 78vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .poster-frame.playing-glow {
+            box-shadow: 12px 12px 0px var(--accent-red), 0 0 35px rgba(217, 4, 41, 0.4);
+            animation: posterBounce 1.2s infinite ease-in-out;
+        }
+
+        @keyframes posterBounce {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        .poster-frame:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 15px 15px 0px var(--ink-black);
+        }
+
+        .poster-frame img {
+            max-height: 73vh;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+            border: 2px solid var(--ink-black);
+            display: block;
+        }
+
+        /* Right Column: Campaign Hub & Audio Player */
+        .campaign-hub {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Banner Card */
+        .hero-card {
+            background: #fff;
+            border: 4px solid var(--ink-black);
+            box-shadow: var(--card-shadow);
+            padding: 24px 28px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .election-tag {
+            display: inline-block;
+            background: var(--accent-gold);
+            color: var(--ink-black);
+            font-weight: 700;
+            padding: 4px 14px;
+            border: 2px solid var(--ink-black);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            font-weight: 700;
+            color: var(--ink-black);
+            margin-bottom: 10px;
+        }
+
+        .hero-title span {
+            color: var(--accent-red);
+            text-decoration: underline wavy var(--accent-gold);
+        }
+
+        .slogan-box {
+            background: var(--ink-black);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-left: 6px solid var(--accent-gold);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* Custom Audio Player Card */
+        .audio-card {
+            background: linear-gradient(135deg, #1e1e24 0%, #121212 100%);
+            color: #fff;
+            border: 4px solid var(--ink-black);
+            box-shadow: var(--card-shadow);
+            padding: 26px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .audio-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Spinning Vinyl Record */
+        .vinyl-disc {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-red) 22%, #111 24%, #222 40%, #111 42%, #333 65%, #111 67%);
+            border: 3px solid var(--accent-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 0 15px rgba(255, 183, 3, 0.3);
+            animation: spinVinyl 4s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .vinyl-disc.spinning {
+            animation-play-state: running;
+        }
+
+        @keyframes spinVinyl {
+            100% { transform: rotate(360deg); }
+        }
+
+        .song-title-group h3 {
+            font-size: 1.45rem;
+            color: var(--accent-gold);
+            margin-bottom: 2px;
+        }
+
+        .song-title-group p {
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+
+        /* Animated Equalizer Bars */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            height: 36px;
+        }
+
+        .bar {
+            width: 6px;
+            background: var(--accent-gold);
+            border-radius: 3px;
+            height: 8px;
+            transition: height 0.2s ease;
+        }
+
+        .equalizer.active .bar:nth-child(1) { animation: eq 0.6s infinite ease-in-out 0.1s; background: var(--accent-red); }
+        .equalizer.active .bar:nth-child(2) { animation: eq 0.5s infinite ease-in-out 0.3s; }
+        .equalizer.active .bar:nth-child(3) { animation: eq 0.7s infinite ease-in-out 0.2s; background: #2ec4b6; }
+        .equalizer.active .bar:nth-child(4) { animation: eq 0.4s infinite ease-in-out 0.4s; }
+        .equalizer.active .bar:nth-child(5) { animation: eq 0.65s infinite ease-in-out 0.15s; background: var(--accent-red); }
+
+        @keyframes eq {
+            0%, 100% { height: 8px; }
+            50% { height: 36px; }
+        }
+
+        /* Big Play Button & Progress */
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .play-btn-giant {
+            background: var(--accent-red);
+            color: #fff;
+            border: 3px solid #fff;
+            padding: 16px 24px;
+            font-size: 1.45rem;
+            font-weight: 700;
+            font-family: 'Hind Siliguri', sans-serif;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 6px 0px #8d021b;
+            transition: all 0.15s ease;
+        }
+
+        .play-btn-giant:hover {
+            background: #ef233c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px #8d021b;
+        }
+
+        .play-btn-giant:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #8d021b;
+        }
+
+        .play-btn-giant.playing {
+            background: var(--accent-green);
+            box-shadow: 0 6px 0px #1b6330;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            font-family: monospace;
+            color: #bbb;
+            min-width: 42px;
+        }
+
+        .progress-container {
+            flex: 1;
+            height: 12px;
+            background: #333;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #555;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+            transition: width 0.1s linear;
+        }
+
+        /* Bottom Interactive Vote / Cheer Section */
+        .interactive-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 20px;
+        }
+
+        .vote-btn {
+            background: var(--accent-gold);
+            color: var(--ink-black);
+            border: 4px solid var(--ink-black);
+            box-shadow: 6px 6px 0px var(--ink-black);
+            padding: 16px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            font-family: 'Hind Siliguri', sans-serif;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.15s ease;
+        }
+
+        .vote-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--ink-black);
+            background: #ffc300;
+        }
+
+        .vote-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px var(--ink-black);
+        }
+
+        .counter-box {
+            background: #fff;
+            border: 4px solid var(--ink-black);
+            box-shadow: 6px 6px 0px var(--ink-black);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .counter-box span.count-num {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            line-height: 1;
+        }
+
+        .counter-box span.count-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* Floating Emojis Animation Container */
+        #emoji-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            bottom: -60px;
+            font-size: 2.5rem;
+            animation: floatUp 4s ease-in forwards;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.25));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 992px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            .poster-frame img {
+                max-height: 60vh;
+            }
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Animated Ticker -->
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            🐓 দ্বিতীয়তম জাতীয় মুরগি নির্বাচন <span>★</span> ক্লাস ক্যাপ্টেন পদে আমাকে মুকিত-কে মুরগী মার্কায় ভোট দিয়ে জয়যুক্ত করুন! <span>★</span> আগামী ১৫ তারিখ সারাদিন, মুরগী মার্কায় ভোট দিন <span>★</span> মুরগী কে উঠতে দিয়ে, খেতে থাকুন রাত দিন! 🍗🔥
+            🐓 দ্বিতীয়তম জাতীয় মুরগি নির্বাচন <span>★</span> ক্লাস ক্যাপ্টেন পদে আমাকে মুকিত-কে মুরগী মার্কায় ভোট দিয়ে জয়যুক্ত করুন! <span>★</span> আগামী ১৫ তারিখ সারাদিন, মুরগী মার্কায় ভোট দিন <span>★</span> মুরগী কে উঠতে দিয়ে, খেতে থাকুন রাত দিন! 🍗🔥
+        </div>
+    </div>
+
+    <!-- Floating Emoji Container -->
+    <div id="emoji-container"></div>
+
+    <!-- Main Content Grid -->
+    <main class="main-container">
+        
+        <!-- Left Side: The Poster -->
+        <section class="poster-section">
+            <div class="badge-floating">🔥 ভোটের দিন: ১৫ তারিখ!</div>
+            <div class="poster-frame" id="posterFrame">
+                <!-- Make sure your image is saved as poster.jpg in the same folder -->
+                <img src="mukit.png.png" alt="মুরগী মার্কা নির্বাচনী পোস্টার - আমাকে মুকিত" id="posterImg">
+            </div>
+        </section>
+
+        <!-- Right Side: Controls, Slogan & Audio Player -->
+        <section class="campaign-hub">
+            
+            <!-- Campaign Info Card -->
+            <div class="hero-card">
+                <div class="election-tag">📢 ক্লাস ক্যাপ্টেন নির্বাচন স্পেশাল</div>
+                <h1 class="hero-title">মুরগী মার্কায় ভোট দিন, <span>আমাকে মুকিত</span>-কে জয়যুক্ত করুন!</h1>
+                <div class="slogan-box">
+                    "আগামী ১৫ তারিখ সারাদিন, মুরগী মার্কায় ভোট দিন,<br>
+                    মুরগী কে উঠতে দিয়ে, খেতে থাকুন রাত দিন!" 🐓🍗
+                </div>
+            </div>
+
+            <!-- Custom Audio Player Card -->
+            <div class="audio-card">
+                <div class="audio-header">
+                    <div class="song-info">
+                        <div class="vinyl-disc" id="vinylDisc">🐓</div>
+                        <div class="song-title-group">
+                            <h3>অফিশিয়াল নির্বাচনী থিম সং 🎵</h3>
+                            <p id="songStatus">প্লে বাটনে ক্লিক করে গানের তালে মেতে উঠুন!</p>
+                        </div>
+                    </div>
+
+                    <!-- Sound Wave Visualizer -->
+                    <div class="equalizer" id="equalizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+
+                <!-- Audio Element (Keep your song named song.mp3 in the same folder) -->
+                <audio id="campaignAudio" src="song.mp3.mpeg" preload="auto"></audio>
+
+                <div class="player-controls">
+                    <button class="play-btn-giant" id="playBtn">
+                        <span id="playIcon">▶</span>
+                        <span id="playText">নির্বাচনী গান বাজান!</span>
+                    </button>
+
+                    <div class="progress-wrapper">
+                        <span class="time-label" id="currentTime">0:00</span>
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        <span class="time-label" id="durationTime">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Classroom Cheer Button -->
+            <div class="interactive-row">
+                <button class="vote-btn" id="cheerBtn">
+                    🐓 মুরগী মার্কায় সাপোর্ট দিন!
+                </button>
+                <div class="counter-box">
+                    <span class="count-num" id="voteCount">100</span>
+                    <span class="count-label">জন ক্লাসে সমর্থন দিয়েছেন 🔥</span>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        const audio = document.getElementById('campaignAudio');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+        const songStatus = document.getElementById('songStatus');
+        const vinylDisc = document.getElementById('vinylDisc');
+        const equalizer = document.getElementById('equalizer');
+        const posterFrame = document.getElementById('posterFrame');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const cheerBtn = document.getElementById('cheerBtn');
+        const voteCountEl = document.getElementById('voteCount');
+        const emojiContainer = document.getElementById('emoji-container');
+
+        let emojiInterval = null;
+        let voteCount = 100;
+
+        // Format seconds into M:SS
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Spawn floating rooster/chicken emojis
+        function spawnEmoji() {
+            const emojis = ['🐓', '🍗', '🐔', '🔥', '🎉', '👑', '🗳️'];
+            const emoji = document.createElement('div');
+            emoji.classList.add('floating-emoji');
+            emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 95 + 'vw';
+            emoji.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            emojiContainer.appendChild(emoji);
+
+            setTimeout(() => {
+                emoji.remove();
+            }, 5000);
+        }
+
+        // Fire Confetti
+        function fireConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#d90429', '#ffb703', '#121212', '#2b9348']
+            });
+        }
+
+        // Play / Pause Audio Logic
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.classList.add('playing');
+                    playIcon.innerText = '⏸';
+                    playText.innerText = 'গান চলছে... (থামাতে ক্লিক করুন)';
+                    songStatus.innerText = '🔊 এখন বাজছে: মুরগী মার্কার থিম সং!';
+                    vinylDisc.classList.add('spinning');
+                    equalizer.classList.add('active');
+                    posterFrame.classList.add('playing-glow');
+                    
+                    fireConfetti();
+                    // Continuously spawn emojis while song plays
+                    emojiInterval = setInterval(spawnEmoji, 450);
+                }).catch(err => {
+                    alert("গানের ফাইল (song.mp3) পাওয়া যায়নি! ফোল্ডারে তোমার গানের ফাইলটি রেখে সেটার নাম song.mp3 দাও।");
+                });
+            } else {
+                audio.pause();
+                playBtn.classList.remove('playing');
+                playIcon.innerText = '▶';
+                playText.innerText = 'নির্বাচনী গান বাজান!';
+                songStatus.innerText = 'গান পজ করা হয়েছে';
+                vinylDisc.classList.remove('spinning');
+                equalizer.classList.remove('active');
+                posterFrame.classList.remove('playing-glow');
+                clearInterval(emojiInterval);
+            }
+        });
+
+        // Update Progress Bar
+        audio.addEventListener('timeupdate', () => {
+            const { duration, currentTime } = audio;
+            if (duration) {
+                const progressPercent = (currentTime / duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                currentTimeEl.innerText = formatTime(currentTime);
+                durationTimeEl.innerText = formatTime(duration);
+            }
+        });
+
+        // Load Audio Duration
+        audio.addEventListener('loadedmetadata', () => {
+            durationTimeEl.innerText = formatTime(audio.duration);
+        });
+
+        // Seek Audio on Progress Bar Click
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            if (duration) {
+                audio.currentTime = (clickX / width) * duration;
+            }
+        });
+
+        // Reset when song ends
+        audio.addEventListener('ended', () => {
+            playBtn.classList.remove('playing');
+            playIcon.innerText = '🔄';
+            playText.innerText = 'আবার বাজান!';
+            songStatus.innerText = 'গান শেষ হয়েছে! মুরগী মার্কা জিন্দাবাদ!';
+            vinylDisc.classList.remove('spinning');
+            equalizer.classList.remove('active');
+            posterFrame.classList.remove('playing-glow');
+            clearInterval(emojiInterval);
+            fireConfetti();
+        });
+
+        // Interactive Cheer / Support Button
+        cheerBtn.addEventListener('click', () => {
+            voteCount++;
+            voteCountEl.innerText = voteCount;
+            fireConfetti();
+            for (let i = 0; i < 6; i++) {
+                setTimeout(spawnEmoji, i * 100);
+            }
+        });
+    </script>
+</body>
+</html>
